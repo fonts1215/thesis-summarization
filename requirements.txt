@@ -1,5 +1,7 @@
+aiofiles==23.2.1
 annotated-types==0.6.0
 asttokens==2.4.1
+blinker==1.7.0
 blis==0.7.11
 catalogue==2.0.10
 certifi==2023.11.17
@@ -16,13 +18,20 @@ debugpy==1.8.0
 decorator==5.1.1
 executing==2.0.1
 filelock==3.13.1
+Flask==3.0.0
 fsspec==2023.12.2
+h11==0.14.0
+h2==4.1.0
+hpack==4.0.0
 huggingface-hub==0.20.1
+Hypercorn==0.15.0
+hyperframe==6.0.1
 idna==3.6
 ipykernel==6.28.0
 ipython==8.19.0
 it-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/it_core_news_lg-3.7.0/it_core_news_lg-3.7.0-py3-none-any.whl#sha256=f48bd152621c872c1f177dbe21929fbb28751e73eb3c61714cf6344c6d582bbf
 it-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/it_core_news_sm-3.7.0/it_core_news_sm-3.7.0-py3-none-any.whl#sha256=c6a300c7d7b440cee6a896f648bce744c9f091375dc8d7ff834a8930d59eb4bd
+itsdangerous==2.1.2
 jedi==0.19.1
 Jinja2==3.1.2
 jupyter_client==8.6.0
@@ -42,6 +51,7 @@ pdfplumber==0.10.3
 Pillow==10.1.0
 platformdirs==4.1.0
 preshed==3.0.9
+priority==2.0.0
 prompt-toolkit==3.0.43
 psutil==5.9.7
 pure-eval==0.2.2
@@ -55,6 +65,7 @@ python-dateutil==2.8.2
 pywin32==306
 PyYAML==6.0.1
 pyzmq==25.1.2
+Quart==0.19.4
 regex==2023.12.25
 requests==2.31.0
 safetensors==0.4.1
@@ -81,3 +92,5 @@ urllib3==2.1.0
 wasabi==1.1.2
 wcwidth==0.2.12
 weasel==0.3.4
+Werkzeug==3.0.1
+wsproto==1.2.0
