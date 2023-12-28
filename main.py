@@ -1,10 +1,9 @@
-from quart import Quart
+from quart import Quart, request
 from PyPDF2 import PdfReader
 from transformers import BartTokenizer, BartForConditionalGeneration
 from spacy import displacy
 
 import spacy
-import json
 
 app = Quart(__name__)
 
@@ -12,8 +11,9 @@ app = Quart(__name__)
 async def json():
     return {"hello": "world"}
 
-@app.route("/ner")
+@app.route("/ner", methods=['POST'])
 async def ner():
+    print('request', await request.get_json())
     doc = nlp("Apple è un'azienda americana che produce dispositivi e software.")
     
     result = []
@@ -24,8 +24,6 @@ async def ner():
             "start": entità.start_char,
             "end": entità.end_char
         })
-
-    print(result)
 
     return result
 
