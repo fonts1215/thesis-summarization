@@ -70,7 +70,6 @@ async def nerBlob(data: NerBlobRequest) -> tuple[NerBasicResponse, int]:
     return NerBasicResponse(items=result), 200
 
 
-
 if __name__ == "__main__":
     model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
     tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')    
