@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'skill-thesis'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BE41A0E476F6432CA45734BCEE4E606D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_95FE33538B974AD89378AA54F617E93F }}
