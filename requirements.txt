@@ -34,7 +34,6 @@ ipykernel==6.28.0
 ipython==8.19.0
 isodate==0.6.1
 it-core-news-lg @ https://github.com/explosion/spacy-models/releases/download/it_core_news_lg-3.7.0/it_core_news_lg-3.7.0-py3-none-any.whl#sha256=f48bd152621c872c1f177dbe21929fbb28751e73eb3c61714cf6344c6d582bbf
-it-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/it_core_news_sm-3.7.0/it_core_news_sm-3.7.0-py3-none-any.whl#sha256=c6a300c7d7b440cee6a896f648bce744c9f091375dc8d7ff834a8930d59eb4bd
 itsdangerous==2.1.2
 jedi==0.19.1
 Jinja2==3.1.2
