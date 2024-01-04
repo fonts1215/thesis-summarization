@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from spacy.training import Example
 
 @dataclass
 class NerBasicRequest:
@@ -16,6 +17,9 @@ class NerItem:
 class NerBasicResponse:
     items: list[NerItem]
 
+@dataclass
+class NerTrainingRequest:
+    items: list[NerItem]
 
 @dataclass
 class NerBlobRequest:

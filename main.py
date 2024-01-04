@@ -1,13 +1,14 @@
-from quart import Quart, request, Quart
+from quart import Quart
 from quart_schema import QuartSchema, validate_request, validate_response
 from PyPDF2 import PdfReader
 from transformers import BartTokenizer, BartForConditionalGeneration
-from spacy import displacy
-from models.Ner.NerBasic import *
-from models.Summarization.SummarizationBasic import *
+from models.ner.NerBasic import *
+from models.summarization.SummarizationBasic import *
 from azure.storage.blob import BlobServiceClient
 
 import spacy
+import random
+import os
 
 app = Quart(__name__)
 QuartSchema(app)
@@ -70,6 +71,24 @@ async def nerBlob(data: NerBlobRequest) -> tuple[NerBasicResponse, int]:
     print (result)
     return NerBasicResponse(items=result), 200
 
+@app.route("/ner/training", methods=['POST'])
+@validate_request(NerTrainingRequest)
+async def nerTraining(data: NerTrainingRequest) -> tuple[int]:
+    examples = to_spacy_examples(data)
+
+    n_iter = 40
+    optimizer = nlp.create_optimizer()
+    for i in range(n_iter):
+        losses = {}
+        random.shuffle(examples)
+        for example in examples:
+            nlp.update([example], sgd=optimizer, losses=losses,drop=0.01)
+        print('Loss at iteration', i, ':', losses['ner'])
+
+    nlp.to_disk(path_model_spacy_ner)
+
+    return '', 200
+
 @app.route("/summarization/blob", methods=['POST'])
 @validate_request(SummarizationBlobRequest)
 @validate_response(SummarizationItem, 200)
@@ -104,17 +123,37 @@ async def summarizationBasic(data: SummarizationBasicRequest) -> tuple[Summariza
     return SummarizationItem(summarize_text=summarized_text), 200
 
 
+
+def to_spacy_examples(ner_training_request):
+    examples = []
+    for item in ner_training_request.items:
+        entities = [(item.start, item.end, item.label)]
+        doc = nlp(item.text)
+        example = Example.from_dict( doc, {"entities": entities})
+        examples.append(example)
+    return examples
+
 if __name__ == "__main__" or __name__ == "main" :
+    model_spacy_ner = 'models_spacy_ner'
+    path_model_spacy_ner = 'models_spacy_ner'
     model = BartForConditionalGeneration.from_pretrained('facebook/bart-large-cnn')
     tokenizer = BartTokenizer.from_pretrained('facebook/bart-large-cnn')    
-    # Loading spacy models
-    nlp = spacy.load("it_core_news_lg")
     
-    # Configurazione delle credenziali di Azure Storage
+    # Logic for donwload for the first time the model if not presente
+    # Loading spacy models
+    if not os.path.exists(path_model_spacy_ner):
+        os.makedirs(path_model_spacy_ner)
+        nlp = spacy.load("it_core_news_lg")
+        nlp.to_disk(path_model_spacy_ner)
+    else: 
+        nlp = spacy.load(model_spacy_ner)
+
+
+    # Configuration for Azure Storage
     container_name = "files"
     blob_name = "aae231f4-0e6f-4440-aca0-c73595c26442"
 
-    # Connessione al contenitore di Azure Blob Storage
+    # Connection to Azure Blob Storage
     connection_string = "DefaultEndpointsProtocol=https;AccountName=filescontainer001;AccountKey=eapSSLF/qY/W3WeaL30hThbGRvLTOtBsZOWTWfGK09sCFXRoyZVNLzW0ktNtwf3gMAn5mtNOaRuU+AStcZzf4w==;EndpointSuffix=core.windows.net"
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     app.run()

@@ -9,3 +9,5 @@
 .venv/Scripts/__pycache__/*
 .venv/share
 .venv/share/*
+models_spacy_ner
+models_spacy_ner/*
