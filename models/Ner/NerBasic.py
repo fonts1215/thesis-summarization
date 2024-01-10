@@ -14,6 +14,10 @@ class NerItem:
 
 
 @dataclass
+class ExtractContentResult:
+    content: str
+
+@dataclass
 class NerBasicResponse:
     items: list[NerItem]
 

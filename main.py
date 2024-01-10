@@ -15,7 +15,29 @@ QuartSchema(app)
 
 @app.route("/api")
 async def json():
-    return {"hello": __name__}
+    return {"appname": __name__, "version": "summ 8000"}
+
+@app.route("/file/extract", methods=['POST'])
+@validate_request(NerBlobRequest)
+async def extractText(data: NerBlobRequest) -> tuple[ExtractContentResult, int]:
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=data.id_file)
+    blob_data = blob_client.download_blob()
+    content = blob_data.readall()
+
+    local_file_path = "local_file.pdf"
+    with open(local_file_path, "wb") as local_file:
+        local_file.write(content)
+
+    text = ""
+
+    with open(local_file_path, "rb") as file:
+        pdf_reader = PdfReader(file)
+        # Estrai il testo da ciascuna pagina del PDF
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            text += page.extract_text()
+
+    return ExtractContentResult(content=text.replace('\n', ' ')), 200
 
 @app.route("/ner/basic", methods=['POST'])
 @validate_request(NerBasicRequest)
@@ -156,4 +178,5 @@ if __name__ == "__main__" or __name__ == "main" :
     # Connection to Azure Blob Storage
     connection_string = "DefaultEndpointsProtocol=https;AccountName=filescontainer001;AccountKey=eapSSLF/qY/W3WeaL30hThbGRvLTOtBsZOWTWfGK09sCFXRoyZVNLzW0ktNtwf3gMAn5mtNOaRuU+AStcZzf4w==;EndpointSuffix=core.windows.net"
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-    app.run()
+    if __name__ == "__main__":
+        app.run()
